@@ -30,7 +30,13 @@ function main() {
     varying vec3 v_Color;
     uniform vec2 d;
     void main() {
-      gl_Position = vec4(a_Position + d, 0.0, 1.0);
+      mat4 translasi = mat4(
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        d, 0.0, 1.0
+      );
+      gl_Position = translasi * vec4(a_Position, 0.0, 1.0);
       v_Color = a_Color;
     }
   `;
@@ -91,14 +97,13 @@ function main() {
 
   var d = [-1.0, 0.0];
   var uD = gl.getUniformLocation(shaderProgram, 'd');
-  gl.uniform2fv(uD, d);
 
   var primitive = gl.TRIANGLES;
   var offset = 0;
   var nVertex = 6;
 
   function render() {
-    d[0] += 0.001;
+    d[0] += 0.001
     gl.uniform2fv(uD, d);
     gl.clearColor(0.0, 0.22, 0.5, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
